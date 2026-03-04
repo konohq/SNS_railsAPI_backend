@@ -1,17 +1,15 @@
 class CommentSerializer
   def self.serialize(comments, current_user = nil)
-
     comments_array = Array.wrap(comments)
-
 
     result = comments_array.map do |c|
       {
         id: c.id,
         content: c.content,
         createdAt: c.created_at,
-        user: serialize_user(c.user), 
-        likesCount: c.likes.size,
-        isLikedByMe: !!current_user && c.likes.any? { |l| l.user_id == current_user.id },
+        user: serialize_user(c.user),
+        likesCount: c.likes.size,  
+        isLikedByMe: current_user.present? && c.likes.any? { |l| l.user_id == current_user.id },
         comments: serialize_comments(c.comments) 
       }
     end
@@ -35,7 +33,7 @@ class CommentSerializer
       {
         id: c.id,
         content: c.content,
-        user: { id: c.user.id, username: c.user.username }
+        user: serialize_user(c.user)
       }
     end
   end

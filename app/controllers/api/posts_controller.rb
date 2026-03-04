@@ -14,7 +14,7 @@ class Api::PostsController < ApplicationController
   def create
     post = current_user.posts.build(post_params)
     if post.save
-      render json: PostSerializer.serialize_single(post, current_user), status: :created
+      render json: PostSerializer.serialize(post, current_user), status: :created
     else
       render json: { errors: post.errors.full_messages }, status: :unprocessable_entity
     end
