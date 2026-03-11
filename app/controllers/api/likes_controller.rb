@@ -1,4 +1,5 @@
-class Api::LikesController < ApplicationController  before_action :authenticate_user!, only: [:create, :destroy]
+class Api::LikesController < ApplicationController
+    before_action :authenticate_user!, only: [:create, :destroy]
 
   def index
        post = Post.find(params[:post_id])
