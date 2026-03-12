@@ -6,6 +6,7 @@ gem 'rack-cors'
 gem "pg"
 gem "dotenv-rails", groups: [:development, :test]
 gem "devise"
+gem 'kaminari'
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
