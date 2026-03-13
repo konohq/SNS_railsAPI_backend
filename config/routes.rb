@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   namespace :api do
-    resources :posts, only: [:index, :create, :show] do
+    resources :posts, only: [:index, :create, :show, :destroy] do
       resources :comments, only: [:index, :create]
     end
   
