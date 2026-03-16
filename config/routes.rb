@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, defaults: { format: :json }
 
-  namespace :api do
+  namespace :api, defaults: { format: :json } do
     resources :posts, only: [:index, :create, :show, :destroy] do
       resources :comments, only: [:index, :create]
     end
