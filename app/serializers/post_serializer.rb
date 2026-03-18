@@ -26,6 +26,7 @@ class PostSerializer
     {
       id: user.id,
       username: user.username,
+      account_id: user.account_id,
       avatarUrl: user.avatar_url
     }
   end
