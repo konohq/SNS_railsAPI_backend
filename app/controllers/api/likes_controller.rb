@@ -10,9 +10,12 @@ class Api::LikesController < ApplicationController
 
   def create
     post = Post.find(params[:post_id])
-    like = current_user.likes.build(post_id: post_id)
+    like = current_user.likes.build(post: post)
     if like.save
-      render json: LikeSerializer.serialize(like, current_user), status: :created
+      render json: { 
+        likesCount: post.likes.size, 
+        isLikedByMe: true 
+      }, status: :created
     else
       render json: { errors: like.errors.full_messages }, status: :unprocessable_entity
     end
@@ -20,14 +23,17 @@ class Api::LikesController < ApplicationController
 
 
 
-  def destroy
-    like = current_user.likes.find(params[:id])
-    like.destroy
-    head :no_content
-  end
-
-  private
-    def comment_params
-    params.require(:comment).permit(:content)
+def destroy
+    post = Post.find(params[:post_id])
+    like = post.likes.find_by(user: current_user)
+    
+    if like&.destroy
+      render json: { 
+        likesCount: post.likes.size, 
+        isLikedByMe: false 
+      }, status: :ok
+    else
+      head :no_content
+    end
   end
 end

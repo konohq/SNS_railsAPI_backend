@@ -15,7 +15,6 @@ class User < ApplicationRecord
   validates :account_id, presence: true, uniqueness: true, format: { with: /\A[a-zA-Z0-9_]+\z/ }
 
   before_validation :generate_jti, on: :create
-
   after_validation :report_validation_errors, if: -> { errors.any? }
 
   def report_validation_errors
@@ -23,10 +22,19 @@ class User < ApplicationRecord
     puts errors.full_messages
     puts "---------------------------------"
   end
+  
+
+  def avatar_url
+  if avatar.attached?
+    Rails.application.routes.url_helpers.rails_blob_path(avatar, only_path: true)
+  else
+    nil
+  end
+end
 
   private
+  
 
-  # jti が空の場合にランダムなIDをセットするメソッド
   def generate_jti
     self.jti ||= SecureRandom.uuid
   end

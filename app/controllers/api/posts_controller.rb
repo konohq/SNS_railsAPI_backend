@@ -2,10 +2,9 @@ class Api::PostsController < ApplicationController
   before_action :authenticate_user! 
   respond_to :json
 
-
   def index
-
-    posts = Post.includes(:user, :likes, comments: :user)
+    posts = Post.where(post_id: nil)
+                .includes(:user, :likes, comments: :user)
                 .order(created_at: :desc)
                 .page(params[:page]).per(10)
 
@@ -13,7 +12,6 @@ class Api::PostsController < ApplicationController
   end
 
   def create
-
     post = current_user.posts.build(post_params)
     if post.save
       render json: PostSerializer.serialize(post, current_user), status: :created
@@ -23,7 +21,6 @@ class Api::PostsController < ApplicationController
   end
 
   def destroy
-
     post = current_user.posts.find(params[:id])
     post.destroy
     head :no_content
