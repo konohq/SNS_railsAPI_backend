@@ -4,12 +4,14 @@ class Api::SessionsController < Devise::SessionsController
   def create
     self.resource = warden.authenticate!(auth_options)
     sign_in(resource_name, resource)
+    
     render json: {
       token: request.env['warden-jwt_auth.token'],
       id: resource.id,
       email: resource.email,
       username: resource.username,     
-      account_id: resource.account_id  
+      account_id: resource.account_id,
+      avatar_url: resource.avatar_url
     }
   end
 

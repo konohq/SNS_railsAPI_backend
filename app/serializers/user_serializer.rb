@@ -7,23 +7,12 @@ class UserSerializer
         id: u.id,
         username: u.username,
         accountId: u.account_id,
-        avatarUrl: u.avatar_url,
+        avatarUrl: u.avatar_url, 
         createdAt: u.created_at,
-        postsCount: u.posts.size,  
+        postsCount: u.respond_to?(:posts) ? u.posts.size : 0
       }
     end
 
-    users.respond_to?(:map) ? result : result.first
-  end
-
-  private
-
-  def self.serialize_user(user)
-    return nil unless user
-    {
-      id: user.id,
-      username: user.username,
-      avatarUrl: user.avatar_url
-    }
+    users.respond_to?(:each) ? result : result.first
   end
 end
