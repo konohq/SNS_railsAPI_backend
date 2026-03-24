@@ -10,30 +10,51 @@ class User < ApplicationRecord
   has_many :likes, dependent: :destroy
   has_one_attached :avatar
 
+  # フォロー機能
+  has_many :active_relationships,  class_name:  "Relationship",
+                                   foreign_key: "follower_id",
+                                   dependent:   :destroy
+  has_many :following, through: :active_relationships, source: :followed
+
+  has_many :passive_relationships, class_name:  "Relationship",
+                                   foreign_key: "followed_id",
+                                   dependent:   :destroy
+  has_many :followers, through: :passive_relationships, source: :follower
+
+ 
   validates :username, presence: true
   validates :jti, presence: true, uniqueness: true 
   validates :account_id, presence: true, uniqueness: true, format: { with: /\A[a-zA-Z0-9_]+\z/ }
 
+  # コールバック
   before_validation :generate_jti, on: :create
-  after_validation :report_validation_errors, if: -> { errors.any? }
 
-  def report_validation_errors
-    puts "--- [Validation Error Detail] ---"
-    puts errors.full_messages
-    puts "---------------------------------"
+
+  def follow(other_user)
+    following << other_user unless self == other_user
   end
-  
+
+  def unfollow(other_user)
+    following.delete(other_user)
+  end
+
+  def following?(other_user)
+    following.include?(other_user)
+  end
+
+  def following_count
+   self.active_relationships.count
+  end
+
+  def followers_count
+   self.passive_relationships.count
+  end
 
   def avatar_url
-  if avatar.attached?
-    Rails.application.routes.url_helpers.rails_blob_path(avatar, only_path: true)
-  else
-    nil
+    avatar.attached? ? Rails.application.routes.url_helpers.rails_blob_path(avatar, only_path: true) : nil
   end
-end
 
   private
-  
 
   def generate_jti
     self.jti ||= SecureRandom.uuid

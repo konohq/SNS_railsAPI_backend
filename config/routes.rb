@@ -5,7 +5,15 @@ Rails.application.routes.draw do
   }, defaults: { format: :json }
   
   namespace :api, defaults: { format: :json } do
+    resources :users, only: [] do
+      member do
+        get :following
+        get :followers
+      end
+    end
+
     resource :profile, only: [:update]
+    resources :relationships, only: [:create, :destroy]
     
     resources :posts, only: [:index, :create, :show, :destroy] do
       resource :like, only: [:create, :destroy]

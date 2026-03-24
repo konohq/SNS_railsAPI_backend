@@ -1,15 +1,13 @@
 class PostSerializer
   def self.serialize(posts, current_user = nil)
-
     posts_array = Array.wrap(posts)
-
 
     result = posts_array.map do |post|
       {
         id: post.id,
         content: post.content,
         createdAt: post.created_at,
-        user: serialize_user(post.user), 
+        user: serialize_user(post.user, current_user), 
         likesCount: post.likes.size,
         isLikedByMe: !!current_user && post.likes.any? { |l| l.user_id == current_user.id },
         comments: serialize_comments(post.comments) 
@@ -21,13 +19,19 @@ class PostSerializer
 
   private
 
-  def self.serialize_user(user)
+  def self.serialize_user(user, current_user)
     return nil unless user
     {
       id: user.id,
       username: user.username,
       account_id: user.account_id,
-      avatarUrl: user.avatar_url
+      avatarUrl: user.avatar_url,
+      bio: user.bio,
+      
+      following_count: user.following_count || 0,
+      followers_count: user.followers_count || 0,
+
+      is_followed_by_me: !!current_user && current_user.following?(user)
     }
   end
 
