@@ -7,6 +7,7 @@ class Api::ProfilesController < ApplicationController
         id: current_user.id,
         username: current_user.username,
         account_id: current_user.account_id,
+        bio: current_user.bio,
         avatar_url: current_user.avatar.attached? ? url_for(current_user.avatar) : nil
       }, status: :ok
     else
@@ -17,6 +18,6 @@ class Api::ProfilesController < ApplicationController
   private
 
   def profile_params
-    params.require(:user).permit(:username, :account_id, :avatar)
+    params.require(:user).permit(:username, :account_id, :avatar, :bio)
   end
 end
