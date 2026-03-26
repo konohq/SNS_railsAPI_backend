@@ -1,0 +1,51 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 105,
+      "fingerprint": "23e078812cee81e8ada596ae1836dcb058ecbfbf37c7e830e7f3f6e5050ca6a6",
+      "check_name": "PermitAttributes",
+      "message": "Potentially dangerous key allowed for mass assignment",
+      "file": "app/controllers/api/profiles_controller.rb",
+      "line": 21,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.require(:user).permit(:username, :account_id, :avatar, :bio)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Api::ProfilesController",
+        "method": "profile_params"
+      },
+      "user_input": ":account_id",
+      "confidence": "High",
+      "cwe_id": [
+        915
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 105,
+      "fingerprint": "9f8ffeb5c2d87eb46e79dc65447c7b8c71cce28372a72ae6eb1005a8e7ffcac6",
+      "check_name": "PermitAttributes",
+      "message": "Potentially dangerous key allowed for mass assignment",
+      "file": "app/controllers/api/users_controller.rb",
+      "line": 46,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.require(:user).permit(:username, :account_id, :avatar, :bio)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Api::UsersController",
+        "method": "user_params"
+      },
+      "user_input": ":account_id",
+      "confidence": "High",
+      "cwe_id": [
+        915
+      ],
+      "note": ""
+    }
+  ],
+  "brakeman_version": "8.0.4"
+}
