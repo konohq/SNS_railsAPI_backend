@@ -62,6 +62,6 @@ jobs:
       - name: Run tests
         env:
           RAILS_ENV: test
-          SECRET_KEY_BASE: dummy_key_for_test
+          SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare test
