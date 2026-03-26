@@ -39,16 +39,25 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          POSTGRES_DB: sns_rails_test
+        # 起動を待つためのヘルスチェック
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
-    # services:
-    #  redis:
-    #    image: redis
-    #    ports:
-    #      - 6379:6379
-    #    options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
+ 
     steps:
       - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config libpq-dev
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -63,5 +72,6 @@ jobs:
         env:
           RAILS_ENV: test
           SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
+          DATABASE_URL: "postgres://postgres:${{ secrets.DB_PASSWORD }}@localhost:5432/sns_rails_test"
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare test
