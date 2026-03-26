@@ -1,5 +1,5 @@
 class Api::LikesController < ApplicationController
-    before_action :authenticate_user!, only: [:create, :destroy]
+    before_action :authenticate_user!, only: [ :create, :destroy ]
 
   def index
        post = Post.find(params[:post_id])
@@ -12,9 +12,9 @@ class Api::LikesController < ApplicationController
     post = Post.find(params[:post_id])
     like = current_user.likes.build(post: post)
     if like.save
-      render json: { 
-        likesCount: post.likes.size, 
-        isLikedByMe: true 
+      render json: {
+        likesCount: post.likes.size,
+        isLikedByMe: true
       }, status: :created
     else
       render json: { errors: like.errors.full_messages }, status: :unprocessable_entity
@@ -26,11 +26,11 @@ class Api::LikesController < ApplicationController
 def destroy
     post = Post.find(params[:post_id])
     like = post.likes.find_by(user: current_user)
-    
+
     if like&.destroy
-      render json: { 
-        likesCount: post.likes.size, 
-        isLikedByMe: false 
+      render json: {
+        likesCount: post.likes.size,
+        isLikedByMe: false
       }, status: :ok
     else
       head :no_content

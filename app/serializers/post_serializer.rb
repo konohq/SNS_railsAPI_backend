@@ -7,10 +7,10 @@ class PostSerializer
         id: post.id,
         content: post.content,
         createdAt: post.created_at,
-        user: serialize_user(post.user, current_user), 
+        user: serialize_user(post.user, current_user),
         likesCount: post.likes.size,
         isLikedByMe: !!current_user && post.likes.any? { |l| l.user_id == current_user.id },
-        comments: serialize_comments(post.comments) 
+        comments: serialize_comments(post.comments)
       }
     end
 
@@ -27,7 +27,7 @@ class PostSerializer
       account_id: user.account_id,
       avatarUrl: user.avatar_url,
       bio: user.bio,
-      
+
       following_count: user.following_count || 0,
       followers_count: user.followers_count || 0,
 

@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-
   let(:valid_attributes) do
     {
       username: "テスト太郎",
@@ -17,12 +16,11 @@ RSpec.describe User, type: :model do
   end
 
   it "アカウントIDが重複していたら無効であること" do
-
     User.create!(valid_attributes)
-    
+
 
     user2 = User.new(valid_attributes.merge(email: "jiro@example.com"))
-    
+
     expect(user2).not_to be_valid
     expect(user2.errors[:account_id]).to include("has already been taken")
   end

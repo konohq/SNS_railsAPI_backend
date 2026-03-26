@@ -1,5 +1,5 @@
 class Api::ProfilesController < ApplicationController
-  before_action :authenticate_user! 
+  before_action :authenticate_user!
 
   def update
     if current_user.update(profile_params)

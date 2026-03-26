@@ -6,7 +6,7 @@ class LikeSerializer
       {
         id: like.id,
         createdAt: like.created_at,
-        user: serialize_user(like.user), 
+        user: serialize_user(like.user)
       }
     end
 

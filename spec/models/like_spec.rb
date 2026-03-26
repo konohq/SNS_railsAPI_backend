@@ -23,7 +23,6 @@ RSpec.describe Like, type: :model do
   end
 
   it "同じ投稿に二回いいねはできないこと" do
-
     Like.create!(user: user, post: post)
 
     duplicate_like = Like.new(user: user, post: post)

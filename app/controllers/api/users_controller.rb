@@ -1,5 +1,5 @@
 class Api::UsersController < ApplicationController
-  before_action :authenticate_user!, only: [:update, :destroy, :following, :followers]
+  before_action :authenticate_user!, only: [ :update, :destroy, :following, :followers ]
 
   def index
     users = User.includes(:posts).all.page(params[:page]).per(20)
@@ -10,7 +10,7 @@ class Api::UsersController < ApplicationController
     user = User.includes(:posts).find(params[:id])
     render json: UserSerializer.serialize(user, current_user)
   end
-  
+
   def following
     @user = User.find(params[:id])
     @users = @user.following

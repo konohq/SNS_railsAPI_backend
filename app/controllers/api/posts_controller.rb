@@ -1,5 +1,5 @@
 class Api::PostsController < ApplicationController
-  before_action :authenticate_user! 
+  before_action :authenticate_user!
   respond_to :json
 
   def index

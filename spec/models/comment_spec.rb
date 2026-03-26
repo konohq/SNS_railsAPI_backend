@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Comment, type: :model do
-
   let(:user) do
     User.create!(
       username: "コメント太郎",

@@ -1,5 +1,5 @@
 class Api::CommentsController < ApplicationController
-   before_action :authenticate_user!, only: [:create, :destroy]
+   before_action :authenticate_user!, only: [ :create, :destroy ]
 
   def index
        post = Post.find(params[:post_id])
@@ -30,4 +30,3 @@ class Api::CommentsController < ApplicationController
     params.require(:comment).permit(:content)
   end
 end
-

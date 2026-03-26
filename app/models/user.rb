@@ -21,10 +21,10 @@ class User < ApplicationRecord
                                    dependent:   :destroy
   has_many :followers, through: :passive_relationships, source: :follower
 
- 
+
   validates :username, presence: true
-  validates :jti, presence: true, uniqueness: true 
-  validates :account_id, presence: true, uniqueness: true, format: { with: /\A[a-zA-Z0-9_]+\z/ }
+  validates :jti, presence: true, uniqueness: true
+  validates :account_id, presence: true, uniqueness: { case_sensitive: false }, format: { with: /\A[a-zA-Z0-9_]+\z/ }, length: { maximum: 15 }
 
   # コールバック
   before_validation :generate_jti, on: :create

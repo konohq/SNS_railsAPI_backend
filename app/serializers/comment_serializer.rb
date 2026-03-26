@@ -8,9 +8,9 @@ class CommentSerializer
         content: c.content,
         createdAt: c.created_at,
         user: serialize_user(c.user),
-        likesCount: c.likes.size,  
+        likesCount: c.likes.size,
         isLikedByMe: current_user.present? && c.likes.any? { |l| l.user_id == current_user.id },
-        comments: serialize_comments(c.comments) 
+        comments: serialize_comments(c.comments)
       }
     end
 

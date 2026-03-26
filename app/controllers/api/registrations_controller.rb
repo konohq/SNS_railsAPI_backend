@@ -1,5 +1,4 @@
 class Api::RegistrationsController < Devise::RegistrationsController
-
   respond_to :json
 
   private
@@ -8,7 +7,7 @@ class Api::RegistrationsController < Devise::RegistrationsController
   def respond_with(resource, _opts = {})
     if resource.persisted?
       render json: {
-        message: 'サインアップ完了',
+        message: "サインアップ完了",
         user: resource
       }, status: :ok
     else
