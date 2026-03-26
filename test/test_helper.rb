@@ -4,8 +4,10 @@ require "rails/test_help"
 
 module ActiveSupport
   class TestCase
-    # Run tests in parallel with specified workers
-    parallelize(workers: :number_of_processors, with: :threads)
+    # 修正ポイント：GitHub Actions上（ENV['CI']がある時）は並列実行をオフにする
+    unless ENV['CI']
+      parallelize(workers: :number_of_processors, with: :threads)
+    end
 
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all

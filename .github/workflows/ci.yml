@@ -76,4 +76,4 @@ jobs:
           # REDIS_URL: redis://localhost:6379/0
         run: |
          bin/rails db:test:prepare
-         bundle exec ruby -I test -e 'Dir.glob("test/**/*_test.rb").each { |f| require "./#{f}" }'
+         bin/rails test
