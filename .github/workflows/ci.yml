@@ -75,5 +75,5 @@ jobs:
           DATABASE_URL: "postgres://postgres:${{ secrets.DB_PASSWORD }}@localhost:5432/sns_rails_test"
           # REDIS_URL: redis://localhost:6379/0
         run: |
-         bin/rails db:test:prepare
+         bin/rails db:prepare
          bin/rails test
