@@ -1,24 +1,30 @@
-# README
+# アプリ名
+ミニSNSアプリ
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## 概要
+Xをベースに作成したSNSアプリです。
+ユーザー登録、投稿、いいね、コメント機能があります。
+自己研鑽のため、随時新機能だったり最新の技術を取り入れる予定です。
 
-Things you may want to cover:
+## 使用技術
+- Ruby on Rails (API mode)
+- React
+- TailwindCSS
+- PostgreSQL
 
-* Ruby version
+## 機能一覧
+- ユーザー登録 / ログイン
+- 投稿作成
+- 投稿一覧
+- コメント
+- いいね
+- フォロー機能
+- アイコンの変更
 
-* System dependencies
+## API構成
+Rails APIでJSONを返し、Reactで表示しています。
 
-* Configuration
+## ディレクトリ構成
+backend → Rails API  
+frontend → React
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
