@@ -11,7 +11,7 @@ Xをベースに作成したSNSアプリです。
 - React
 - TailwindCSS
 - PostgreSQL
-
+- 生成AI Geminiなど
 ## 機能一覧
 - ユーザー登録 / ログイン
 - 投稿作成
