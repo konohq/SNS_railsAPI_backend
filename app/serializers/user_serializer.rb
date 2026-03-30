@@ -8,6 +8,7 @@ class UserSerializer
         username: u.username,
         accountId: u.account_id,
         avatarUrl: u.avatar_url,
+        bio: u.bio,
         createdAt: u.created_at,
         postsCount: u.respond_to?(:posts) ? u.posts.size : 0
       }
