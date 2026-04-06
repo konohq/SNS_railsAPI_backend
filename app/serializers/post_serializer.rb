@@ -10,7 +10,8 @@ class PostSerializer
         user: serialize_user(post.user, current_user),
         likesCount: post.likes.size,
         isLikedByMe: !!current_user && post.likes.any? { |l| l.user_id == current_user.id },
-        comments: serialize_comments(post.comments)
+        comments: serialize_comments(post.comments),
+        repost: serialize_repost(post.repost, current_user)
       }
     end
 
@@ -18,6 +19,17 @@ class PostSerializer
   end
 
   private
+
+  def self.serialize_repost(repost, current_user)
+    return nil unless repost
+
+    {
+      id: repost.id,
+      content: repost.content,
+      createdAt: repost.created_at,
+      user: serialize_user(repost.user, current_user)
+    }
+  end
 
   def self.serialize_user(user, current_user)
     return nil unless user
@@ -34,6 +46,8 @@ class PostSerializer
       is_followed_by_me: !!current_user && current_user.following?(user)
     }
   end
+
+
 
   def self.serialize_comments(comments)
     comments.map do |c|

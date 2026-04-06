@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_24_152315) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_06_034041) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -69,7 +69,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_24_152315) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "post_id"
+    t.integer "repost_id"
     t.index ["post_id"], name: "index_posts_on_post_id"
+    t.index ["repost_id"], name: "index_posts_on_repost_id"
+    t.index ["user_id", "repost_id"], name: "index_posts_on_user_id_and_repost_id", unique: true, where: "(repost_id IS NOT NULL)"
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
