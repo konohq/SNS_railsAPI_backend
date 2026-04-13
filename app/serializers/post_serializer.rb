@@ -10,7 +10,7 @@ class PostSerializer
         user: serialize_user(post.user, current_user),
         likesCount: post.likes.size,
         isLikedByMe: !!current_user && post.likes.any? { |l| l.user_id == current_user.id },
-        comments: serialize_comments(post.comments),
+        comments: serialize_comments(post.comments, current_user), 
         repost: serialize_repost(post.repost, current_user)
       }
     end
@@ -18,11 +18,9 @@ class PostSerializer
     posts.respond_to?(:map) ? result : result.first
   end
 
-  private
-
+  
   def self.serialize_repost(repost, current_user)
     return nil unless repost
-
     {
       id: repost.id,
       content: repost.content,
@@ -39,22 +37,18 @@ class PostSerializer
       account_id: user.account_id,
       avatarUrl: user.avatar_url,
       bio: user.bio,
-
       following_count: user.following_count || 0,
       followers_count: user.followers_count || 0,
-
       is_followed_by_me: !!current_user && current_user.following?(user)
     }
   end
 
-
-
-  def self.serialize_comments(comments)
+  def self.serialize_comments(comments, current_user = nil)
     comments.map do |c|
       {
         id: c.id,
         content: c.content,
-        user: { id: c.user.id, username: c.user.username }
+        user: serialize_user(c.user, current_user) # serialize_userを再利用
       }
     end
   end
