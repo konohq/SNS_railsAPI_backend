@@ -10,7 +10,7 @@ class PostSerializer
         user: serialize_user(post.user, current_user),
         likesCount: post.likes.size,
         isLikedByMe: !!current_user && post.likes.any? { |l| l.user_id == current_user.id },
-        comments: serialize_comments(post.comments, current_user), 
+        comments: serialize_comments(post.comments, current_user),
         repost: serialize_repost(post.repost, current_user)
       }
     end
@@ -18,7 +18,7 @@ class PostSerializer
     posts.respond_to?(:map) ? result : result.first
   end
 
-  
+
   def self.serialize_repost(repost, current_user)
     return nil unless repost
     {
