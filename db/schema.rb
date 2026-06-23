@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_06_034041) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_23_090000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -77,10 +77,14 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_06_034041) do
   end
 
   create_table "relationships", force: :cascade do |t|
-    t.integer "follower_id"
-    t.integer "followed_id"
+    t.bigint "follower_id", null: false
+    t.bigint "followed_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["followed_id"], name: "index_relationships_on_followed_id"
+    t.index ["follower_id", "followed_id"], name: "index_relationships_on_follower_id_and_followed_id", unique: true
+    t.index ["follower_id"], name: "index_relationships_on_follower_id"
+    t.check_constraint "follower_id <> followed_id", name: "relationships_cannot_follow_self"
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -116,4 +120,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_06_034041) do
   add_foreign_key "likes", "users"
   add_foreign_key "posts", "posts"
   add_foreign_key "posts", "users"
+  add_foreign_key "relationships", "users", column: "followed_id", on_delete: :cascade
+  add_foreign_key "relationships", "users", column: "follower_id", on_delete: :cascade
 end

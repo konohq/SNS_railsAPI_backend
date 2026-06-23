@@ -13,7 +13,7 @@ Rails.application.routes.draw do
     end
 
     resource :profile, only: [ :update ]
-    resources :relationships, only: [ :create, :destroy ]
+    resources :relationships, only: [ :create, :destroy ], param: :followed_id
 
     resources :posts, only: [ :index, :create, :show, :destroy ] do
       resource :like, only: [ :create, :destroy ]
