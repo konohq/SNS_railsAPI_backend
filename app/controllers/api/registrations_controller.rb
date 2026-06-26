@@ -11,9 +11,7 @@ class Api::RegistrationsController < Devise::RegistrationsController
         user: resource
       }, status: :ok
     else
-      render json: {
-        errors: resource.errors.full_messages
-      }, status: :unprocessable_entity
+      render_validation_error(resource.errors)
     end
   end
 end

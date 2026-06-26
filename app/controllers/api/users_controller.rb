@@ -30,7 +30,7 @@ class Api::UsersController < ApplicationController
 
       render json: PostSerializer.serialize_user(user, current_user)
     else
-      render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+      render_validation_error(user.errors)
     end
   end
 

@@ -24,7 +24,7 @@ class Api::PostsController < ApplicationController
     if post.save
       render json: PostSerializer.serialize(post, current_user), status: :created
     else
-      render json: { errors: post.errors.full_messages }, status: :unprocessable_entity
+      render_validation_error(post.errors)
     end
   end
 

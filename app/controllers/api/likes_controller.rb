@@ -17,7 +17,7 @@ class Api::LikesController < ApplicationController
         isLikedByMe: true
       }, status: :created
     else
-      render json: { errors: like.errors.full_messages }, status: :unprocessable_entity
+      render_validation_error(like.errors)
     end
   end
 

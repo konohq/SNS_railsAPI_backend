@@ -2,7 +2,12 @@ class Api::SessionsController < Devise::SessionsController
   respond_to :json
 
   def create
-    self.resource = warden.authenticate!(auth_options)
+    self.resource = User.find_for_database_authentication(email: params.dig(:user, :email))
+
+    unless resource&.valid_password?(params.dig(:user, :password))
+      return render_unauthorized("メールアドレスまたはパスワードが正しくありません")
+    end
+
     sign_in(resource_name, resource)
 
     render json: {

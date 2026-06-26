@@ -29,8 +29,8 @@ RSpec.describe "Api::Authentication", type: :request do
         post user_registration_path, params: valid_params, as: :json
       }.not_to change(User, :count)
 
-      expect(response).to have_http_status(:unprocessable_content)
-      expect(response.parsed_body["errors"]).to be_present
+      expect_validation_error_json
+      expect(response.parsed_body.dig("error", "details", "email")).to be_present
     end
 
     it "必須項目が不足していると登録に失敗する" do
@@ -40,8 +40,8 @@ RSpec.describe "Api::Authentication", type: :request do
              as: :json
       }.not_to change(User, :count)
 
-      expect(response).to have_http_status(:unprocessable_content)
-      expect(response.parsed_body["errors"]).to be_present
+      expect_validation_error_json
+      expect(response.parsed_body.dig("error", "details", "email")).to be_present
     end
   end
 
@@ -67,7 +67,7 @@ RSpec.describe "Api::Authentication", type: :request do
            params: { user: { email: user.email, password: "wrong-password" } },
            as: :json
 
-      expect(response).to have_http_status(:unauthorized)
+      expect_unauthorized_json(message: "メールアドレスまたはパスワードが正しくありません")
     end
 
     it "存在しないユーザーではログインに失敗する" do
@@ -75,7 +75,7 @@ RSpec.describe "Api::Authentication", type: :request do
            params: { user: { email: "missing@example.com", password: "password123" } },
            as: :json
 
-      expect(response).to have_http_status(:unauthorized)
+      expect_unauthorized_json(message: "メールアドレスまたはパスワードが正しくありません")
     end
   end
 
@@ -92,7 +92,7 @@ RSpec.describe "Api::Authentication", type: :request do
 
       get api_posts_path, headers: headers, as: :json
 
-      expect(response).to have_http_status(:unauthorized)
+      expect_unauthorized_json
     end
   end
 end

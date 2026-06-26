@@ -10,7 +10,7 @@ RSpec.describe "Api::Likes", type: :request do
         post api_post_like_path(post_record), as: :json
       }.not_to change(Like, :count)
 
-      expect(response).to have_http_status(:unauthorized)
+      expect_unauthorized_json
     end
 
     it "未認証時は存在しない投稿へのいいねでも401が優先される" do
@@ -18,7 +18,7 @@ RSpec.describe "Api::Likes", type: :request do
         post api_post_like_path(0), as: :json
       }.not_to change(Like, :count)
 
-      expect(response).to have_http_status(:unauthorized)
+      expect_unauthorized_json
     end
 
     it "いいねできる" do
@@ -40,8 +40,8 @@ RSpec.describe "Api::Likes", type: :request do
         post api_post_like_path(post_record), headers: auth_headers_for(current_user), as: :json
       }.not_to change(Like, :count)
 
-      expect(response).to have_http_status(:unprocessable_content)
-      expect(response.parsed_body["errors"]).to be_present
+      expect_validation_error_json
+      expect(response.parsed_body.dig("error", "details", "user_id")).to be_present
     end
 
     it "存在しない投稿にはいいねできない" do

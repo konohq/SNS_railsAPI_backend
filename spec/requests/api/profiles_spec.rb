@@ -10,7 +10,7 @@ RSpec.describe "Api::Profiles", type: :request do
             params: { user: { username: "未認証更新" } },
             as: :json
 
-      expect(response).to have_http_status(:unauthorized)
+      expect_unauthorized_json
     end
 
     it "自分のプロフィールを更新できる" do
@@ -45,8 +45,8 @@ RSpec.describe "Api::Profiles", type: :request do
             headers: auth_headers_for(current_user),
             as: :json
 
-      expect(response).to have_http_status(:unprocessable_content)
-      expect(response.parsed_body["errors"]).to be_present
+      expect_validation_error_json
+      expect(response.parsed_body.dig("error", "details", "account_id")).to be_present
     end
   end
 end

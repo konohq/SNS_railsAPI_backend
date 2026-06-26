@@ -37,7 +37,7 @@ RSpec.describe "Api::Posts", type: :request do
     it "未認証時は存在しない投稿詳細でも401が優先される" do
       get api_post_path(0), as: :json
 
-      expect(response).to have_http_status(:unauthorized)
+      expect_unauthorized_json
     end
   end
 
@@ -49,7 +49,7 @@ RSpec.describe "Api::Posts", type: :request do
              as: :json
       }.not_to change(Post, :count)
 
-      expect(response).to have_http_status(:unauthorized)
+      expect_unauthorized_json
     end
 
     it "認証済みユーザーは投稿作成できる" do
@@ -72,8 +72,19 @@ RSpec.describe "Api::Posts", type: :request do
              as: :json
       }.not_to change(Post, :count)
 
-      expect(response).to have_http_status(:unprocessable_content)
-      expect(response.parsed_body["errors"]).to be_present
+      expect_validation_error_json
+      expect(response.parsed_body.dig("error", "details", "content")).to be_present
+    end
+
+    it "必須パラメータ不足は400 JSONを返す" do
+      expect {
+        post api_posts_path,
+             params: {},
+             headers: auth_headers_for(current_user),
+             as: :json
+      }.not_to change(Post, :count)
+
+      expect_bad_request_json
     end
   end
 

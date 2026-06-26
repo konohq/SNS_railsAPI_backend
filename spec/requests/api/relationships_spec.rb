@@ -44,7 +44,7 @@ RSpec.describe "Api::Relationships", type: :request do
              as: :json
       }.not_to change(Relationship, :count)
 
-      expect(response).to have_http_status(:unauthorized)
+      expect_unauthorized_json
     end
 
     it "自分自身をフォローできない" do
@@ -55,8 +55,8 @@ RSpec.describe "Api::Relationships", type: :request do
              as: :json
       }.not_to change(Relationship, :count)
 
-      expect(response).to have_http_status(:unprocessable_content)
-      expect(response.parsed_body["errors"]).to be_present
+      expect_validation_error_json
+      expect(response.parsed_body.dig("error", "details", "followed")).to be_present
     end
 
     it "同じユーザーを二重フォローできない" do
@@ -69,8 +69,8 @@ RSpec.describe "Api::Relationships", type: :request do
              as: :json
       }.not_to change(Relationship, :count)
 
-      expect(response).to have_http_status(:unprocessable_content)
-      expect(response.parsed_body["errors"]).to be_present
+      expect_validation_error_json
+      expect(response.parsed_body.dig("error", "details", "follower_id")).to be_present
     end
 
     it "存在しないユーザーIDを指定すると404を返す" do
@@ -79,8 +79,7 @@ RSpec.describe "Api::Relationships", type: :request do
            headers: auth_headers_for(current_user),
            as: :json
 
-      expect(response).to have_http_status(:not_found)
-      expect(response.parsed_body["errors"]).to be_present
+      expect_not_found_json(message: "フォロー対象のユーザーが見つかりません")
     end
   end
 
@@ -110,7 +109,7 @@ RSpec.describe "Api::Relationships", type: :request do
         delete api_relationship_path(target_user), as: :json
       }.not_to change(Relationship, :count)
 
-      expect(response).to have_http_status(:unauthorized)
+      expect_unauthorized_json
     end
 
     it "対象のRelationshipが存在しない場合は404を返す" do
@@ -118,8 +117,7 @@ RSpec.describe "Api::Relationships", type: :request do
              headers: auth_headers_for(current_user),
              as: :json
 
-      expect(response).to have_http_status(:not_found)
-      expect(response.parsed_body["errors"]).to be_present
+      expect_not_found_json(message: "フォロー関係が見つかりません")
     end
   end
 end

@@ -16,10 +16,7 @@ class Api::RelationshipsController < ApplicationController
         followed_id: user.id
       }
     else
-      render json: {
-        status: "error",
-        errors: relationship.errors.full_messages
-      }, status: :unprocessable_content
+      render_validation_error(relationship.errors)
     end
   end
 
@@ -43,17 +40,15 @@ class Api::RelationshipsController < ApplicationController
   def authenticate_api_user!
     return if current_user
 
-    render json: { errors: [ "認証が必要です" ] }, status: :unauthorized
-  end
-
-  def render_not_found(message)
-    render json: { errors: [ message ] }, status: :not_found
+    render_unauthorized
   end
 
   def render_duplicate_relationship
-    render json: {
-      status: "error",
-      errors: [ "既にフォローしています" ]
-    }, status: :unprocessable_content
+    render_error(
+      code: "validation_error",
+      message: "入力内容に誤りがあります",
+      details: [ "既にフォローしています" ],
+      status: :unprocessable_content
+    )
   end
 end

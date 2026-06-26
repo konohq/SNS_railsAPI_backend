@@ -11,7 +11,7 @@ class Api::ProfilesController < ApplicationController
         avatar_url: current_user.avatar.attached? ? url_for(current_user.avatar) : nil
       }, status: :ok
     else
-      render json: { errors: current_user.errors.full_messages }, status: :unprocessable_entity
+      render_validation_error(current_user.errors)
     end
   end
 
