@@ -27,6 +27,18 @@ RSpec.describe "Api::Posts", type: :request do
         "content" => "詳細表示の投稿"
       )
     end
+
+    it "存在しない投稿詳細は404 JSONを返す" do
+      get api_post_path(0), headers: auth_headers_for(current_user), as: :json
+
+      expect_not_found_json
+    end
+
+    it "未認証時は存在しない投稿詳細でも401が優先される" do
+      get api_post_path(0), as: :json
+
+      expect(response).to have_http_status(:unauthorized)
+    end
   end
 
   describe "POST /api/posts" do
@@ -83,7 +95,7 @@ RSpec.describe "Api::Posts", type: :request do
         delete api_post_path(post_record), headers: auth_headers_for(current_user), as: :json
       }.not_to change(Post, :count)
 
-      expect(response).to have_http_status(:not_found)
+      expect_not_found_json
     end
   end
 end

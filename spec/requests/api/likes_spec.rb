@@ -13,6 +13,14 @@ RSpec.describe "Api::Likes", type: :request do
       expect(response).to have_http_status(:unauthorized)
     end
 
+    it "未認証時は存在しない投稿へのいいねでも401が優先される" do
+      expect {
+        post api_post_like_path(0), as: :json
+      }.not_to change(Like, :count)
+
+      expect(response).to have_http_status(:unauthorized)
+    end
+
     it "いいねできる" do
       expect {
         post api_post_like_path(post_record), headers: auth_headers_for(current_user), as: :json
@@ -41,7 +49,7 @@ RSpec.describe "Api::Likes", type: :request do
         post api_post_like_path(0), headers: auth_headers_for(current_user), as: :json
       }.not_to change(Like, :count)
 
-      expect(response).to have_http_status(:not_found)
+      expect_not_found_json
     end
   end
 

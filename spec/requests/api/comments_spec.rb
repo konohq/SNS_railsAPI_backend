@@ -27,6 +27,16 @@ RSpec.describe "Api::Comments", type: :request do
       expect(response).to have_http_status(:unauthorized)
     end
 
+    it "未認証時は存在しない投稿へのコメントでも401が優先される" do
+      expect {
+        post api_post_comments_path(0),
+             params: { comment: { content: "未認証コメント" } },
+             as: :json
+      }.not_to change(Comment, :count)
+
+      expect(response).to have_http_status(:unauthorized)
+    end
+
     it "コメントを作成できる" do
       expect {
         post api_post_comments_path(post_record),
@@ -47,7 +57,7 @@ RSpec.describe "Api::Comments", type: :request do
              as: :json
       }.not_to change(Comment, :count)
 
-      expect(response).to have_http_status(:not_found)
+      expect_not_found_json
     end
   end
 
