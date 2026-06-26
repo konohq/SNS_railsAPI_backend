@@ -28,6 +28,11 @@ class Api::PostsController < ApplicationController
     end
   end
 
+  def show
+    post = Post.includes(:user, :likes, :repost, comments: :user).find(params[:id])
+    render json: PostSerializer.serialize(post, current_user)
+  end
+
   def destroy
     post = current_user.posts.find(params[:id])
     post.destroy

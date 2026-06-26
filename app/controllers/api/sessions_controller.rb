@@ -26,7 +26,7 @@ class Api::SessionsController < Devise::SessionsController
   end
 
 
-  def respond_to_on_destroy
+  def respond_to_on_destroy(_resource = nil)
     render json: { message: "ログアウト成功" }, status: :ok
   end
 end

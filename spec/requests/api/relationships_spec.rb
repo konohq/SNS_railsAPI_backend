@@ -19,17 +19,6 @@ RSpec.describe "Api::Relationships", type: :request do
     )
   end
 
-  def auth_headers_for(user)
-    post user_session_path,
-         params: { user: { email: user.email, password: "password123" } },
-         as: :json
-
-    token = response.parsed_body["token"] || response.headers["Authorization"]
-    authorization = token.start_with?("Bearer ") ? token : "Bearer #{token}"
-
-    { "Authorization" => authorization }
-  end
-
   describe "POST /api/relationships" do
     it "ログイン済みユーザーが他のユーザーをフォローできる" do
       expect {
