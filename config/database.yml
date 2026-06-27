@@ -15,5 +15,22 @@ test:
   database: minisns_test
 
 production:
-  <<: *default
-  database: minisns_production
+  primary: &primary_production
+    <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
+    database: minisns_production
+
+  cache:
+    <<: *primary_production
+    database: minisns_production_cache
+    schema_dump: db/cache_schema.rb
+
+  queue:
+    <<: *primary_production
+    database: minisns_production_queue
+    schema_dump: db/queue_schema.rb
+
+  cable:
+    <<: *primary_production
+    database: minisns_production_cable
+    schema_dump: db/cable_schema.rb

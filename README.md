@@ -60,3 +60,31 @@ X（旧Twitter）をベースとしたSNSアプリケーションです。
 .
 ├── backend  # Ruby on Rails 8 (API Mode)
 └── frontend # React 19 (Vite + TailwindCSS v4)
+```
+
+---
+
+## 🚢 本番デプロイ準備（Render）
+
+Render などの本番環境では、バックエンド側に以下の環境変数を設定します。
+
+| 変数名 | 用途 |
+|---|---|
+| `DATABASE_URL` | 本番 PostgreSQL の接続URL。Render PostgreSQL を利用する場合は External Database URL などを設定します。 |
+| `SECRET_KEY_BASE` | Rails と devise-jwt の署名用 secret。このアプリでは JWT secret として `config/initializers/devise.rb` で使用しています。 |
+| `FRONTEND_ORIGIN` | CORS で許可する本番フロントエンドのオリジン。例: `https://example-frontend.onrender.com` |
+| `RAILS_ENV` | `production` を設定します。 |
+| `RAILS_MASTER_KEY` | encrypted credentials を本番で参照する場合に必要です。`SECRET_KEY_BASE` を環境変数で設定する運用なら JWT secret 目的では不要です。 |
+
+JWT は `Authorization` ヘッダーで送受信します。CORS では本番の `FRONTEND_ORIGIN` のみを明示的に許可し、レスポンスヘッダーの `Authorization` を公開しています。
+
+ポートフォリオ用途の本番設定では、cache / Active Job / Action Cable は追加DBを必須にしない軽量構成にしています。
+
+### デプロイ前チェック
+
+```bash
+bundle exec rspec
+bundle exec rubocop
+bundle exec brakeman --no-pager
+git diff --check
+```
