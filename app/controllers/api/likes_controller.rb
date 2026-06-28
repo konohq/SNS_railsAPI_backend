@@ -1,12 +1,5 @@
 class Api::LikesController < ApplicationController
-    before_action :authenticate_user!, only: [ :create, :destroy ]
-
-  def index
-       post = Post.find(params[:post_id])
-       likes = post.likes.includes(:user)
-
-    render json: LikeSerializer.serialize(comments, current_user)
-  end
+  before_action :authenticate_user!, only: [ :create, :destroy ]
 
   def create
     post = Post.find(params[:post_id])
@@ -21,9 +14,7 @@ class Api::LikesController < ApplicationController
     end
   end
 
-
-
-def destroy
+  def destroy
     post = Post.find(params[:post_id])
     like = post.likes.find_by(user: current_user)
 
